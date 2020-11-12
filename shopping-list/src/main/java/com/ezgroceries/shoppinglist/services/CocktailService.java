@@ -1,5 +1,6 @@
-package com.ezgroceries.shoppinglist;
+package com.ezgroceries.shoppinglist.services;
 
+import com.ezgroceries.shoppinglist.resources.CocktailResource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
