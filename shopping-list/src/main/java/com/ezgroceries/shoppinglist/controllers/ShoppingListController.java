@@ -1,7 +1,9 @@
-package com.ezgroceries.shoppinglist.services;
+package com.ezgroceries.shoppinglist.controllers;
 
 import com.ezgroceries.shoppinglist.resources.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.services.CocktailService;
+import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/shopping-lists", produces = "application/json")
+@RequestMapping(value = {"/shopping-lists", "/api"}, produces = "application/json")
 public class ShoppingListController {
 
     @Autowired

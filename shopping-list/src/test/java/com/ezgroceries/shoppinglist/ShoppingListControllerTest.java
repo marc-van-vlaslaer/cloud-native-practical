@@ -1,9 +1,9 @@
 package com.ezgroceries.shoppinglist;
 
+import com.ezgroceries.shoppinglist.controllers.ShoppingListController;
 import com.ezgroceries.shoppinglist.services.CocktailService;
-import com.ezgroceries.shoppinglist.services.ShoppingListController;
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
