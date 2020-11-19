@@ -1,6 +1,5 @@
-package com.ezgroceries.shoppinglist;
+package com.ezgroceries.shoppinglist.controllers;
 
-import com.ezgroceries.shoppinglist.controllers.ShoppingListController;
 import com.ezgroceries.shoppinglist.services.CocktailService;
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import org.junit.jupiter.api.Test;

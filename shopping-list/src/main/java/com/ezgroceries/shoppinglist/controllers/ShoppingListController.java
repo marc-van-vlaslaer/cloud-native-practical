@@ -1,7 +1,7 @@
 package com.ezgroceries.shoppinglist.controllers;
 
-import com.ezgroceries.shoppinglist.resources.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.resources.CocktailResource;
 import com.ezgroceries.shoppinglist.services.CocktailService;
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,8 @@ public class ShoppingListController {
     public void updateShoppingList(@RequestBody List<CocktailResource> cocktailResource,
                                    @PathVariable  UUID shoppingListId) {
         for(int i = 0; i < cocktailResource.size(); i++) {
-            CocktailResource refCocktail = cocktailService.getCocktail(cocktailResource.get(i).getCocktailId());
+//            CocktailResource refCocktail = cocktailService.getCocktail(cocktailResource.get(i).getCocktailId());
+            CocktailResource refCocktail = (CocktailResource) cocktailService.getCocktail(cocktailResource.get(i).getCocktailId());
             shoppingListService.addIngredients(shoppingListId, refCocktail.getIngredients());
         }
 
