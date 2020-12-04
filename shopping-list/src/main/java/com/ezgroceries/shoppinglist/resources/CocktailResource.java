@@ -1,19 +1,20 @@
 package com.ezgroceries.shoppinglist.resources;
 
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class CocktailResource {
-    private String cocktailId;
+    private UUID cocktailId;
     private String name;
     private String glass;
     private String instructions;
     private String image;
-    private List<String> ingredients;
+    private Set<String> ingredients;
 
     public CocktailResource() {
     }
 
-    public CocktailResource(String cocktailId, String name, String glass, String instructions, String image, List<String> ingredients){
+    public CocktailResource(UUID cocktailId, String name, String glass, String instructions, String image, Set<String> ingredients){
         this.cocktailId = cocktailId;
         this.name = name;
         this.glass = glass;
@@ -22,7 +23,7 @@ public class CocktailResource {
         this.ingredients = ingredients;
     }
 
-    public void setCocktailId(String cocktailId) {
+    public void setCocktailId(UUID cocktailId) {
         this.cocktailId = cocktailId;
     }
 
@@ -42,11 +43,11 @@ public class CocktailResource {
         this.image = image;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(Set<String> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public String getCocktailId() {
+    public UUID getCocktailId() {
         return cocktailId;
     }
 
@@ -66,7 +67,7 @@ public class CocktailResource {
         return image;
     }
 
-    public List<String> getIngredients() {
+    public Set<String> getIngredients() {
         return ingredients;
     }
 }

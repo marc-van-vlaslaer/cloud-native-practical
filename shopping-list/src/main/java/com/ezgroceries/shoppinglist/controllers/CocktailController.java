@@ -18,11 +18,13 @@ public class CocktailController {
     private CocktailService cocktailService;
 
     public CocktailController(CocktailService cocktailService) {
+
         this.cocktailService = cocktailService;
     }
 
     @GetMapping
     public List<CocktailResource> get(@RequestParam String search) {
+
         return cocktailService.searchCocktail(search);
     }
 

@@ -1,68 +1,89 @@
 package com.ezgroceries.shoppinglist.services;
 
+import com.ezgroceries.shoppinglist.entities.CocktailEntity;
+import com.ezgroceries.shoppinglist.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.repositories.CocktailRepository;
+import com.ezgroceries.shoppinglist.repositories.ShoppingListRepository;
+import com.ezgroceries.shoppinglist.resources.CocktailResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ShoppingListService {
 
- //   private static List<ShoppingList> shoppingLists = new ArrayList<>();
-    private static List<ShoppingList> shoppingLists = new ArrayList<>(Arrays.asList(
-            new ShoppingList("Marc"),
-            new ShoppingList("Maria")
+    @Autowired
+    private final ShoppingListRepository shoppingListRepository;
 
-    ));
+    @Autowired
+    private final CocktailRepository cocktailRepository;
 
-    public static List<ShoppingList> getAllShoppingLists() {
-        return shoppingLists;
+    public ShoppingListService(ShoppingListRepository shoppingListEntityRepository, CocktailRepository cocktailRepository) {
+        this.shoppingListRepository = shoppingListEntityRepository;
+        this.cocktailRepository = cocktailRepository;
     }
 
-    public ShoppingList getShoppingList (UUID shoppingListId){
-        return shoppingLists.stream().filter(t -> t.getShoppingListId().equals(shoppingListId)).findFirst().get();
+
+    public ShoppingListEntity addShoppingList(ShoppingListEntity shoppingListEntity) {
+        ShoppingListEntity shoppingListEntitySave = new ShoppingListEntity();
+        shoppingListEntitySave.setName(shoppingListEntity.getName());
+        shoppingListEntitySave.setShoppingListId(UUID.randomUUID());
+        return shoppingListRepository.save(shoppingListEntitySave);
+
     }
 
-    public ShoppingList addShoppingList(ShoppingList shoppingList) {
-        shoppingList.setShoppingListId(UUID.randomUUID());
-        shoppingLists.add(shoppingList);
+    public List<ShoppingListEntity> getAllShoppingLists() {
+        List<ShoppingListEntity> shoppingListEntities = new ArrayList<>();
+        shoppingListRepository.findAll().forEach(shoppingListEntities::add);
+        return shoppingListEntities;
+    }
+
+    public Optional<ShoppingListEntity> getShoppingList(UUID shoppingListId) {
+        return shoppingListRepository.findById(shoppingListId);
+
+    }
+
+    public ShoppingList addCocktailsToShoppingList(String shoppingListId, List<CocktailResource> cocktails) {
+        ShoppingListEntity shoppingListEntity = shoppingListRepository.findById(UUID.fromString(shoppingListId)).get();
+        //check if shoppinglist exists
+        if (shoppingListEntity == null) {
+            throw new RuntimeException("shopping list not found");
+        }
+        List<CocktailEntity> linkedCocktailEntities = shoppingListEntity.getCocktailEntities().stream().collect(Collectors.toList());
+        //Loop over all cocktails in request
+        for (int i = 0; i < cocktails.size(); i++) {
+            CocktailEntity cocktailEntity = cocktailRepository.findById((cocktails.get(i).getCocktailId())).get();
+            if (cocktailEntity == null ) {
+                throw new RuntimeException("cocktail not found");
+            } else if (linkedCocktailEntities.contains(cocktailEntity)){
+
+                } else {
+                        shoppingListEntity.getCocktailEntities().add(cocktailEntity);
+                    }
+        }
+        shoppingListRepository.save(shoppingListEntity);
+
+        //To do shoppinglist teruggeven en opvullen zoals gedaan voor cocktailresource
+        System.out.println("fill shopping list");
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setShoppingListId(shoppingListEntity.getShoppingListId());
+        shoppingList.setName(shoppingListEntity.getName());
         return shoppingList;
+
+
     }
 
-    public void updateShoppingList(UUID shoppingListId, ShoppingList shoppingList) {
-        for (int i = 0; i < shoppingLists.size(); i++){
-            ShoppingList s = shoppingLists.get(i);
-            if (s.getShoppingListId().equals(shoppingListId)){
-                shoppingLists.set(i,shoppingList);
-                return;
-            }
-        }
-    }
-
-    public void addIngredients(UUID shoppingListId, List<String> ingredients) {
-        ShoppingList s = getShoppingList(shoppingListId);
-        for (int ing = 0; ing < ingredients.size(); ing++) {
-            s.addIngredient(s, ingredients.get(ing));
-        }
-        return;
-    }
-
-//        for (int i = 0; i < shoppingLists.size(); i++){
-//            ShoppingList s = shoppingLists.get(i);
-//            if (s.getShoppingListId().equals(shoppingListId)){
-//                for (int ing = 0; ing < ingredients.size(); ing++){
-//                    s.addIngredient(s, ingredients.get(ing));
-//                }
-//                return;
-//            }
-//        }
-//    }
-
-
-    public void deleteShoppingList(UUID shoppingListId) {
-        shoppingLists.removeIf(t -> t.getShoppingListId().equals(shoppingListId));
-    }
 }
+
+
+
+
+
+
+

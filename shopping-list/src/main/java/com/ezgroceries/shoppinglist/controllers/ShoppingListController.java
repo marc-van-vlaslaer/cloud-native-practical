@@ -1,5 +1,6 @@
 package com.ezgroceries.shoppinglist.controllers;
 
+import com.ezgroceries.shoppinglist.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.resources.CocktailResource;
 import com.ezgroceries.shoppinglist.services.CocktailService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -22,37 +24,33 @@ public class ShoppingListController {
     private CocktailService cocktailService;
 
     @GetMapping
-    public List<ShoppingList> getAllShoppingLists(){
-        return ShoppingListService.getAllShoppingLists();
+    public List<ShoppingListEntity> getAllShoppingLists(){
+        return shoppingListService.getAllShoppingLists();
     }
 
     @GetMapping("/{shoppingListId}")
-    public ShoppingList getShoppingList (@PathVariable UUID shoppingListId){
+    public Optional<ShoppingListEntity> getShoppingList (@PathVariable UUID shoppingListId){
         return shoppingListService.getShoppingList(shoppingListId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ShoppingList addShoppingList(@RequestBody ShoppingList shoppingList) {
-        return shoppingListService.addShoppingList(shoppingList);
+    public ShoppingListEntity addShoppingList(@RequestBody ShoppingListEntity shoppingListEntity) {
+        return shoppingListService.addShoppingList(shoppingListEntity);
     }
 
     @PutMapping(value = "/{shoppingListId}/cocktails",
             consumes = "application/json", produces = "application/json")
-    public void updateShoppingList(@RequestBody List<CocktailResource> cocktailResource,
-                                   @PathVariable  UUID shoppingListId) {
-        for(int i = 0; i < cocktailResource.size(); i++) {
-//            CocktailResource refCocktail = cocktailService.getCocktail(cocktailResource.get(i).getCocktailId());
-            CocktailResource refCocktail = (CocktailResource) cocktailService.getCocktail(cocktailResource.get(i).getCocktailId());
-            shoppingListService.addIngredients(shoppingListId, refCocktail.getIngredients());
-        }
+    public ShoppingList updateShoppingList(@RequestBody List<CocktailResource> cocktailResource,
+                                           @PathVariable  String shoppingListId) {
+        return shoppingListService.addCocktailsToShoppingList(shoppingListId, cocktailResource);
 
     }
 
-    @DeleteMapping("/shopping-lists/{shoppingListId}")
-    public void deleteShoppingList (@PathVariable UUID shoppingListId){
-        shoppingListService.deleteShoppingList(shoppingListId);
-    }
+//    @DeleteMapping("/shopping-lists/{shoppingListId}")
+//    public void deleteShoppingList (@PathVariable UUID shoppingListId){
+//        shoppingListService.deleteShoppingList(shoppingListId);
+//    }
 
 }
 
