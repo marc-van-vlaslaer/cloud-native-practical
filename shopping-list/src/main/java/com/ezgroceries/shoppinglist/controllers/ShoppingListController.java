@@ -1,8 +1,7 @@
 package com.ezgroceries.shoppinglist.controllers;
 
-import com.ezgroceries.shoppinglist.entities.ShoppingListEntity;
-import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.resources.CocktailResource;
+import com.ezgroceries.shoppinglist.resources.ShoppingListResource;
 import com.ezgroceries.shoppinglist.services.CocktailService;
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +23,25 @@ public class ShoppingListController {
     private CocktailService cocktailService;
 
     @GetMapping
-    public List<ShoppingListEntity> getAllShoppingLists(){
+    public List<ShoppingListResource> getAllShoppingLists(){
+
         return shoppingListService.getAllShoppingLists();
     }
 
     @GetMapping("/{shoppingListId}")
-    public Optional<ShoppingListEntity> getShoppingList (@PathVariable UUID shoppingListId){
+    public Optional<ShoppingListResource> getShoppingList (@PathVariable UUID shoppingListId){
         return shoppingListService.getShoppingList(shoppingListId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ShoppingListEntity addShoppingList(@RequestBody ShoppingListEntity shoppingListEntity) {
-        return shoppingListService.addShoppingList(shoppingListEntity);
+    public ShoppingListResource addShoppingList(@RequestBody ShoppingListResource shoppingListResource) {
+        return shoppingListService.addShoppingList(shoppingListResource);
     }
 
     @PutMapping(value = "/{shoppingListId}/cocktails",
             consumes = "application/json", produces = "application/json")
-    public ShoppingList updateShoppingList(@RequestBody List<CocktailResource> cocktailResource,
+    public ShoppingListResource updateShoppingList(@RequestBody List<CocktailResource> cocktailResource,
                                            @PathVariable  String shoppingListId) {
         return shoppingListService.addCocktailsToShoppingList(shoppingListId, cocktailResource);
 
